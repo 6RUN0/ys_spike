@@ -1,0 +1,12 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ * See:
+ * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_uninstall/7
+ */
+function ys_spike_uninstall() {
+  db_delete('variable')
+    ->condition('name', 'ys_spike_%', 'LIKE')
+    ->execute;
+}

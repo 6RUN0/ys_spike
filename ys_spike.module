@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * Implements hook_permission().
+ * See:
+ * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_permission/7
+ */
+function ys_spike_permission() {
+  return array(
+    'administer ys_spike' => array(
+      'title' => t('Administer Yandex.Server Spike'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_menu().
+ * See:
+ * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_menu/7
+ */
+function ys_spike_menu() {
+  $items['admin/config/search/ys_spike'] = array(
+    'title' => 'Yandex.Server Spike',
+    'description' => t('Configure Yandex.Server Spike'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ys_spike_admin_settings'),
+    'access arguments' => array('administer ys_spike'),
+    'file' => 'ys_spike.admin.inc',
+  );
+  return $items;
+}
+
+/**
+ * Implements hook_custom_theme().
+ * See:
+ * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_custom_theme/7
+ */
+function ys_spike_custom_theme() {
+  $custom_theme = variable_get('ys_spike_theme', '');
+  if(!empty($custom_theme) && ys_spike_is_yandex_server()) {
+    return $custom_theme;
+  }
+}
+
+/**
+ * @return
+ * TRUE if a site is indexed Yandex.Server
+ */
+function ys_spike_is_yandex_server() {
+  if (isset($_SERVER['HTTP_USER_AGENT'])) {
+    $user_agent = variable_get('ys_spike_user_agent', '');
+    $ip_address = variable_get('ys_spike_ip_address', '');
+    if($_SERVER['HTTP_USER_AGENT'] == $user_agent && $ip_address == ip_address()) {
+      return TRUE;
+    }
+  }
+  return FALSE;
+}
+
+/**
+ * @return
+ * associative array ['machine name of the theme'] => theme name of the file info
+ */
+function ys_spike_list_themes() {
+  $names = array();
+  // See https://api.drupal.org/api/drupal/includes!theme.inc/function/list_themes/7
+  $themes = list_themes();
+  foreach ($themes as $theme) {
+    if ($theme->status) {
+      $names[$theme->name] = $theme->info['name'];
+    }
+  }
+  return $names;
+}
