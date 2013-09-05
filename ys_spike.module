@@ -37,16 +37,42 @@ function ys_spike_menu() {
  */
 function ys_spike_custom_theme() {
   $custom_theme = variable_get('ys_spike_theme', '');
-  if(!empty($custom_theme) && ys_spike_is_yandex_server()) {
+  if(!empty($custom_theme) && _ys_spike_is_yandex_server()) {
     return $custom_theme;
   }
 }
 
 /**
+ * Implementation of hook_process().
+ */
+function ys_spike_process() {
+  global $conf;
+  $conf['cache'] = FALSE;
+}
+
+/**
+ * Implementation of hook_form_alter().
+ */
+function ys_spike_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'system_performance_settings') {
+    $icon = theme('image', array('path' => 'misc/watchdog-warning.png', 'width' => 18, 'height' => 18, 'alt' => t('warning'), 'title' => t('warning')));
+    $form['caching']['ys_spike'] = array(
+      '#type' => 'item',
+      '#title' => t('Yandex.Search Spike'),
+      '#markup' => t('!icon Модуль Yandex.Search Spike отключает кеширование страниц', array(
+        '!icon' => '<span class="icon">' . $icon . '</span>')
+      ),
+      '#attributes' => array('class' => array('warning')),
+    );
+  }
+}
+
+
+/**
  * @return
  * TRUE if a site is indexed Yandex.Server
  */
-function ys_spike_is_yandex_server() {
+function _ys_spike_is_yandex_server() {
   if (isset($_SERVER['HTTP_USER_AGENT'])) {
     $user_agent = variable_get('ys_spike_user_agent', '');
     $ip_address = variable_get('ys_spike_ip_address', '');
@@ -59,9 +85,9 @@ function ys_spike_is_yandex_server() {
 
 /**
  * @return
- * associative array ['machine name of the theme'] => theme name of the file info
+ * associative array ['machine name of the theme'] => theme name of the file .info
  */
-function ys_spike_list_themes() {
+function _ys_spike_list_themes() {
   $names = array();
   // See https://api.drupal.org/api/drupal/includes!theme.inc/function/list_themes/7
   $themes = list_themes();

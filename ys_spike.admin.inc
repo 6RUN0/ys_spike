@@ -23,7 +23,7 @@ function ys_spike_admin_settings($form, &$form_state) {
     '#required' => TRUE,
     '#description' => t('Тема оформления, которая будет использованна для индексации Yandex.Server\'ом'),
     '#default_value' => variable_get('ys_spike_theme', ''),
-    '#options' => ys_spike_list_themes(),
+    '#options' => _ys_spike_list_themes(),
   );
 
   return system_settings_form($form);

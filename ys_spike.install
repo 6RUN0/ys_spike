@@ -1,5 +1,14 @@
 <?php
 
+
+/**
+ * Implements hook_uninstall().
+ * See:
+ * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_install/7
+ */
+/*function ys_spike_install() {
+}*/
+
 /**
  * Implements hook_uninstall().
  * See:

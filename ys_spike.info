@@ -2,3 +2,4 @@ name = Yandex.Server Spike
 description = Делает заябись для Yandex.Server'а
 core = 7.x
 package = Shit
+version = 7.x-.1
