@@ -36,6 +36,8 @@ function ys_spike_menu() {
  * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_custom_theme/7
  */
 function ys_spike_custom_theme() {
+  global $conf;
+  $conf['cache'] = FALSE;
   $custom_theme = variable_get('ys_spike_theme', '');
   if(!empty($custom_theme) && _ys_spike_is_yandex_server()) {
     return $custom_theme;
@@ -43,18 +45,13 @@ function ys_spike_custom_theme() {
 }
 
 /**
- * Implementation of hook_process().
- */
-function ys_spike_process() {
-  global $conf;
-  $conf['cache'] = FALSE;
-}
-
-/**
  * Implementation of hook_form_alter().
+ * See:
+ * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_form_alter/7
  */
 function ys_spike_form_alter(&$form, &$form_state, $form_id) {
   if ($form_id == 'system_performance_settings') {
+    $form['caching']['cache']['#disabled'] = TRUE;
     $icon = theme('image', array('path' => 'misc/watchdog-warning.png', 'width' => 18, 'height' => 18, 'alt' => t('warning'), 'title' => t('warning')));
     $form['caching']['ys_spike'] = array(
       '#type' => 'item',

@@ -1,13 +1,15 @@
 <?php
 
-
 /**
- * Implements hook_uninstall().
+ * Implements hook_install().
  * See:
  * https://api.drupal.org/api/drupal/modules!system!system.api.php/function/hook_install/7
  */
-/*function ys_spike_install() {
-}*/
+function ys_spike_install() {
+  if(variable_get('cache')) {
+    variable_set('cache', 0);
+  }
+}
 
 /**
  * Implements hook_uninstall().
