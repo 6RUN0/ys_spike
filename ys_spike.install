@@ -20,4 +20,5 @@ function ys_spike_uninstall() {
   db_delete('variable')
     ->condition('name', 'ys_spike_%', 'LIKE')
     ->execute();
+  cache_clear_all('variables', 'cache_bootstrap');
 }
